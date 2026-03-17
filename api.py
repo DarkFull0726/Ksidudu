@@ -26,11 +26,11 @@ V2RAY_CFG           = "/usr/local/etc/v2ray/config.json"
 notified_visitors = set()
 
 VPS = {
-    "brazil": {"IP":"216.238.105.165","PORT":22,"DOMAIN":"br.darkfullhn.xyz","NS":"ns.darkfullhn.xyz","LOCAL":False,"BYPASS_PAM":True,"NAME":"Brazil","PORTS":"SSH:22  |  DNS:53  |  SSL:443  |  UDP:36712"},
-    "mexico": {"IP":"64.177.80.171","PORT":22,"DOMAIN":"mxvlt.darkfullhn.xyz","NS":"nsmxvlt.darkfullhn.xyz","LOCAL":True,"BYPASS_PAM":False,"NAME":"Mexico","PORTS":"SSH:22  |  DNS:53  |  WEB:80  |  SSL:443  |  SOCKS:5000  |  BadVPN:7200  |  BadVPN:7300  |  SOCKS:8080  |  UDP:36712"},
-    "chile":  {"IP":"64.176.20.206","PORT":22,"DOMAIN":"cl.darkfullhn.xyz","NS":"nscl.darkfullhn.xyz","LOCAL":False,"BYPASS_PAM":True,"NAME":"Chile","PORTS":"SSH:22  |  DNS:53  |  SSL:443  |  UDP:36712"},
-    "dallas": {"IP":"149.28.241.124","PORT":22,"DOMAIN":"us.darkfullhn.xyz","NS":"nsus.darkfullhn.xyz","LOCAL":False,"BYPASS_PAM":True,"NAME":"Dallas","PORTS":"SSH:22  |  DNS:53  |  SSL:443  |  UDP:36712"},
-    "miami":  {"IP":"207.246.72.79","PORT":22,"DOMAIN":"mia.darkfullhn.xyz","NS":"nsmia.darkfullhn.xyz","LOCAL":False,"BYPASS_PAM":True,"NAME":"Miami (Juegos)","PORTS":"SSH:22  |  DNS:53  |  SSL:443  |  UDP:36712"}
+    "brazil": {"IP":"216.238.105.165","PORT":22,"DOMAIN":"br.darkfullhn.xyz","NS":"ns.darkfullhn.xyz","LOCAL":False,"BYPASS_PAM":True,"NAME":"Brazil","PORTS":"SSH:22  |  DNS:53  |  SSL:443  |  UDP:36712","MAINTENANCE":True},
+    "mexico": {"IP":"216.238.84.148","PORT":22,"DOMAIN":"mxvlt.darkfullhn.xyz","NS":"nsmxvlt.darkfullhn.xyz","LOCAL":True,"BYPASS_PAM":False,"NAME":"Mexico","PORTS":"SSH:22  |  DNS:53  |  WEB:80  |  SSL:443  |  SOCKS:5000  |  BadVPN:7200  |  BadVPN:7300  |  SOCKS:8080  |  UDP:36712","MAINTENANCE":False},
+    "chile":  {"IP":"64.176.20.206","PORT":22,"DOMAIN":"cl.darkfullhn.xyz","NS":"nscl.darkfullhn.xyz","LOCAL":False,"BYPASS_PAM":True,"NAME":"Chile","PORTS":"SSH:22  |  DNS:53  |  SSL:443  |  UDP:36712","MAINTENANCE":True},
+    "dallas": {"IP":"149.28.241.124","PORT":22,"DOMAIN":"us.darkfullhn.xyz","NS":"nsus.darkfullhn.xyz","LOCAL":False,"BYPASS_PAM":True,"NAME":"Dallas","PORTS":"SSH:22  |  DNS:53  |  SSL:443  |  UDP:36712","MAINTENANCE":True},
+    "miami":  {"IP":"207.246.72.79","PORT":22,"DOMAIN":"mia.darkfullhn.xyz","NS":"nsmia.darkfullhn.xyz","LOCAL":False,"BYPASS_PAM":True,"NAME":"Miami (Juegos)","PORTS":"SSH:22  |  DNS:53  |  SSL:443  |  UDP:36712","MAINTENANCE":True}
 }
 
 # ── Sesiones ──
@@ -318,6 +318,7 @@ def api_create():
     username = data.get("username","").strip()
     password = data.get("password","").strip()
     if vps_key not in VPS: return jsonify({"ok":False,"error":"VPS invalida"}), 400
+    if VPS[vps_key].get("MAINTENANCE"): return jsonify({"ok":False,"error":"Este servidor esta en mantenimiento. Usa Mexico por ahora."}), 503
     if not username or len(username)<3 or len(username)>20: return jsonify({"ok":False,"error":"Usuario entre 3 y 20 caracteres"}), 400
     if not username.isalnum(): return jsonify({"ok":False,"error":"Solo letras y numeros"}), 400
     if not password or len(password)<4: return jsonify({"ok":False,"error":"Contrasena minimo 4 caracteres"}), 400
